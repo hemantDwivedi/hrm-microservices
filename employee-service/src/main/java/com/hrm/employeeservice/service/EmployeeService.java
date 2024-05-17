@@ -57,4 +57,16 @@ public class EmployeeService {
         employee.setGender(employeeDetails.getGender());
         return employee;
     }
+
+    public String updateEmployee(Long id, EmployeeDto employeeDetails) {
+        Employee employee = employeeRepository.findById(id).orElse(null);
+        employee.setFirstName(employeeDetails.getFirstName());
+        employee.setLastName(employeeDetails.getLastName());
+        employee.setEmail(employeeDetails.getEmail());
+        employee.setPhone(employeeDetails.getPhone());
+        employee.setDateOfBirth(employeeDetails.getDateOfBirth());
+        employee.setGender(employeeDetails.getGender());
+        employeeRepository.save(employee);
+        return "Employee updated with ID: " + employee.getEmployeeId();
+    }
 }
