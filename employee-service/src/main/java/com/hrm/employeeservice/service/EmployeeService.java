@@ -5,6 +5,8 @@ import com.hrm.employeeservice.entity.Employee;
 import com.hrm.employeeservice.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class EmployeeService {
     private EmployeeRepository employeeRepository;
@@ -18,6 +20,31 @@ public class EmployeeService {
         Employee employee = mapToEmployee(employeeDetails);
         Employee savedEmployee = employeeRepository.save(employee);
         return "Employee saved successfully with ID: " + savedEmployee.getEmployeeId();
+    }
+
+    public List<EmployeeDto> getEmployeeList() {
+        return employeeRepository
+                .findAll()
+                .stream()
+                .map(this::mapToEmployeeDto)
+                .toList();
+    }
+
+
+    public EmployeeDto getEmployeeById(Long id) {
+        Employee employee = employeeRepository.findById(id).orElse(null);
+        return mapToEmployeeDto(employee);
+    }
+
+    private EmployeeDto mapToEmployeeDto(Employee employee) {
+        return new EmployeeDto(
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getEmail(),
+                employee.getPhone(),
+                employee.getDateOfBirth(),
+                employee.getGender()
+        );
     }
 
     private Employee mapToEmployee(EmployeeDto employeeDetails) {

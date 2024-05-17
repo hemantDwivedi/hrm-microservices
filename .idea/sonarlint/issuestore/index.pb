@@ -26,3 +26,7 @@ Yemployee-service/src/main/java/com/hrm/employeeservice/repository/EmployeeRepos
 Xemployee-service/src/main/java/com/hrm/employeeservice/httprequests.create-employee.http,5\4\547591081219f6daf660761a375636e229980735
 ˆ
 Xemployee-service/src/main/java/com/hrm/employeeservice/httprequests/create-employee.http,6\b\6b244d5aa0c8b6c661d412e0c715067c729eb091
+…
+Uemployee-service/src/main/java/com/hrm/employeeservice/httprequests/get-employee.http,e\5\e5234062b20e61b2bb73545263dfe23965b5ed91
+Š
+Zemployee-service/src/main/java/com/hrm/employeeservice/httprequests/employee-requests.http,d\4\d477be8af6671535b0bd66c699ce9fb897b5450a
