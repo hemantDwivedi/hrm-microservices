@@ -19,7 +19,7 @@ public class EmployeeService {
     public String createEmployee(EmployeeDto employeeDetails) {
         Employee employee = mapToEmployee(employeeDetails);
         Employee savedEmployee = employeeRepository.save(employee);
-        return "Employee saved successfully with ID: " + savedEmployee.getEmployeeId();
+        return "Employee created with ID: " + savedEmployee.getEmployeeId();
     }
 
     public List<EmployeeDto> getEmployeeList() {
@@ -67,6 +67,11 @@ public class EmployeeService {
         employee.setDateOfBirth(employeeDetails.getDateOfBirth());
         employee.setGender(employeeDetails.getGender());
         employeeRepository.save(employee);
-        return "Employee updated with ID: " + employee.getEmployeeId();
+        return "Employee ID: " + employee.getEmployeeId() + " updated";
+    }
+
+    public String deleteEmployee(Long id) {
+        employeeRepository.deleteById(id);
+        return "Employee ID: " + id + " deleted";
     }
 }
