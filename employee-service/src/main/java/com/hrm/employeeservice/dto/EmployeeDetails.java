@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDto {
+public class EmployeeDetails {
     private String firstName;
     private String lastName;
     private String email;
@@ -18,4 +18,7 @@ public class EmployeeDto {
     @JsonProperty("dob")
     private String dateOfBirth;
     private String gender;
+    private String city;
+    private String state;
+    private String pinCode;
 }

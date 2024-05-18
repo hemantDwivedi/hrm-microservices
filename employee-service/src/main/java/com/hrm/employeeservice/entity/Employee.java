@@ -28,4 +28,7 @@ public class Employee {
     private String dateOfBirth;
     @Column(nullable = false)
     private String gender;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "address_id")
+    private Address address;
 }

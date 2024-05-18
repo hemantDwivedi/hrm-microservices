@@ -1,7 +1,9 @@
 package com.hrm.employeeservice.service;
 
-import com.hrm.employeeservice.dto.EmployeeDto;
+import com.hrm.employeeservice.dto.EmployeeDetails;
+import com.hrm.employeeservice.entity.Address;
 import com.hrm.employeeservice.entity.Employee;
+import com.hrm.employeeservice.repository.AddressRepository;
 import com.hrm.employeeservice.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,44 +12,42 @@ import java.util.List;
 @Service
 public class EmployeeService {
     private EmployeeRepository employeeRepository;
+    private AddressRepository addressRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository) {
+    public EmployeeService(EmployeeRepository employeeRepository, AddressRepository addressRepository) {
         this.employeeRepository = employeeRepository;
+        this.addressRepository = addressRepository;
     }
 
 
-    public String createEmployee(EmployeeDto employeeDetails) {
+    public String createEmployee(EmployeeDetails employeeDetails) {
         Employee employee = mapToEmployee(employeeDetails);
+        Address address = mapToAddress(new Address(), employeeDetails);
+        Address savedAddress = addressRepository.save(address);
+        employee.setAddress(savedAddress);
         Employee savedEmployee = employeeRepository.save(employee);
         return "Employee created with ID: " + savedEmployee.getEmployeeId();
     }
 
-    public List<EmployeeDto> getEmployeeList() {
+    public List<Employee> getEmployeeList() {
         return employeeRepository
-                .findAll()
-                .stream()
-                .map(this::mapToEmployeeDto)
-                .toList();
+                .findAll();
     }
 
 
-    public EmployeeDto getEmployeeById(Long id) {
+    public Employee getEmployeeById(Long id) {
         Employee employee = employeeRepository.findById(id).orElse(null);
-        return mapToEmployeeDto(employee);
+        return employee;
     }
 
-    private EmployeeDto mapToEmployeeDto(Employee employee) {
-        return new EmployeeDto(
-                employee.getFirstName(),
-                employee.getLastName(),
-                employee.getEmail(),
-                employee.getPhone(),
-                employee.getDateOfBirth(),
-                employee.getGender()
-        );
+    private Address mapToAddress(Address address, EmployeeDetails employeeDetails){
+        address.setCity(employeeDetails.getCity());
+        address.setState(employeeDetails.getState());
+        address.setPinCode(employeeDetails.getPinCode());
+        return address;
     }
 
-    private Employee mapToEmployee(EmployeeDto employeeDetails) {
+    private Employee mapToEmployee(EmployeeDetails employeeDetails) {
         Employee employee = new Employee();
         employee.setFirstName(employeeDetails.getFirstName());
         employee.setLastName(employeeDetails.getLastName());
@@ -58,7 +58,7 @@ public class EmployeeService {
         return employee;
     }
 
-    public String updateEmployee(Long id, EmployeeDto employeeDetails) {
+    public String updateEmployee(Long id, EmployeeDetails employeeDetails) {
         Employee employee = employeeRepository.findById(id).orElse(null);
         employee.setFirstName(employeeDetails.getFirstName());
         employee.setLastName(employeeDetails.getLastName());
@@ -66,12 +66,18 @@ public class EmployeeService {
         employee.setPhone(employeeDetails.getPhone());
         employee.setDateOfBirth(employeeDetails.getDateOfBirth());
         employee.setGender(employeeDetails.getGender());
+        Address savedAddress = addressRepository.findById(employee.getAddress().getAddressId()).orElse(null);
+        Address address = mapToAddress(savedAddress, employeeDetails);
+        addressRepository.save(address);
         employeeRepository.save(employee);
         return "Employee ID: " + employee.getEmployeeId() + " updated";
     }
 
     public String deleteEmployee(Long id) {
-        employeeRepository.deleteById(id);
+        Employee employee = employeeRepository.findById(id).orElse(null);
+        Address address = addressRepository.findById(employee.getAddress().getAddressId()).orElse(null);
+        employeeRepository.delete(employee);
+        addressRepository.delete(address);
         return "Employee ID: " + id + " deleted";
     }
 }

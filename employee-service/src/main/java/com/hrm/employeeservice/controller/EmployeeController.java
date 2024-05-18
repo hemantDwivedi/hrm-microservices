@@ -1,6 +1,7 @@
 package com.hrm.employeeservice.controller;
 
-import com.hrm.employeeservice.dto.EmployeeDto;
+import com.hrm.employeeservice.dto.EmployeeDetails;
+import com.hrm.employeeservice.entity.Employee;
 import com.hrm.employeeservice.service.EmployeeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,23 +19,23 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createEmployee(@RequestBody EmployeeDto employee){
+    public ResponseEntity<String> createEmployee(@RequestBody EmployeeDetails employee){
         return new ResponseEntity<>(employeeService.createEmployee(employee), HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<EmployeeDto>> getEmployees(){
+    public ResponseEntity<List<Employee>> getEmployees(){
         return new ResponseEntity<>(employeeService.getEmployeeList(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmployeeDto> getEmployeeById(@PathVariable Long id){
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id){
         return new ResponseEntity<>(employeeService.getEmployeeById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDto employeeDto){
-        return new ResponseEntity<>(employeeService.updateEmployee(id, employeeDto), HttpStatus.OK);
+    public ResponseEntity<String> updateEmployee(@PathVariable Long id, @RequestBody EmployeeDetails employeeDetails){
+        return new ResponseEntity<>(employeeService.updateEmployee(id, employeeDetails), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
