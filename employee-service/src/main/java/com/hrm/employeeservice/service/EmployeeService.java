@@ -3,6 +3,7 @@ package com.hrm.employeeservice.service;
 import com.hrm.employeeservice.dto.EmployeeDetails;
 import com.hrm.employeeservice.entity.Address;
 import com.hrm.employeeservice.entity.Employee;
+import com.hrm.employeeservice.exception.ResourceNotFoundException;
 import com.hrm.employeeservice.repository.AddressRepository;
 import com.hrm.employeeservice.repository.EmployeeRepository;
 import org.springframework.stereotype.Service;
@@ -36,8 +37,10 @@ public class EmployeeService {
 
 
     public Employee getEmployeeById(Long id) {
-        Employee employee = employeeRepository.findById(id).orElse(null);
-        return employee;
+        return employeeRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Employee not exists with ID: " + id)
+                );
     }
 
     private Address mapToAddress(Address address, EmployeeDetails employeeDetails){
@@ -59,14 +62,20 @@ public class EmployeeService {
     }
 
     public String updateEmployee(Long id, EmployeeDetails employeeDetails) {
-        Employee employee = employeeRepository.findById(id).orElse(null);
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Employee not exists with ID: " + id)
+                );
         employee.setFirstName(employeeDetails.getFirstName());
         employee.setLastName(employeeDetails.getLastName());
         employee.setEmail(employeeDetails.getEmail());
         employee.setPhone(employeeDetails.getPhone());
         employee.setDateOfBirth(employeeDetails.getDateOfBirth());
         employee.setGender(employeeDetails.getGender());
-        Address savedAddress = addressRepository.findById(employee.getAddress().getAddressId()).orElse(null);
+        Address savedAddress = addressRepository.findById(employee.getAddress().getAddressId())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Address does not exists with ID: " + employee.getEmployeeId())
+                );
         Address address = mapToAddress(savedAddress, employeeDetails);
         addressRepository.save(address);
         employeeRepository.save(employee);
@@ -74,8 +83,14 @@ public class EmployeeService {
     }
 
     public String deleteEmployee(Long id) {
-        Employee employee = employeeRepository.findById(id).orElse(null);
-        Address address = addressRepository.findById(employee.getAddress().getAddressId()).orElse(null);
+        Employee employee = employeeRepository.findById(id)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Employee does not exists with ID: " + id)
+                );
+        Address address = addressRepository.findById(employee.getAddress().getAddressId())
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Address does not exists with ID: " + employee.getEmployeeId())
+                );
         employeeRepository.delete(employee);
         addressRepository.delete(address);
         return "Employee ID: " + id + " deleted";
