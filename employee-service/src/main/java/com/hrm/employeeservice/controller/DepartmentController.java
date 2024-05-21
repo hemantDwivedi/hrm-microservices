@@ -2,6 +2,7 @@ package com.hrm.employeeservice.controller;
 
 import com.hrm.employeeservice.entity.Department;
 import com.hrm.employeeservice.service.DepartmentService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,7 @@ public class DepartmentController {
     }
 
     @PostMapping
-    public ResponseEntity<String> saveDepartment(@RequestBody Department department){
+    public ResponseEntity<String> saveDepartment(@RequestBody @Valid Department department){
         return new ResponseEntity<>(departmentService.addDepartment(department), HttpStatus.CREATED);
     }
 }
