@@ -21,4 +21,9 @@ public class EmployeeDetails {
     private String city;
     private String state;
     private String pinCode;
+    private String startDate;
+    private String endDate;
+    private String position;
+    private String salary;
+    private Long departmentId;
 }

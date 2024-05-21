@@ -31,4 +31,10 @@ public class Employee {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
+    @OneToOne
+    @JoinColumn(name = "emp_his_id")
+    private EmploymentHistory employmentHistory;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "department_id")
+    private Department department;
 }
