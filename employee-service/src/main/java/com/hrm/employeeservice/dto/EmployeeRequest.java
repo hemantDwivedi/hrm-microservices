@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeDetails {
+public class EmployeeRequest {
     @NotBlank(message = "First name should not be null")
     private String firstName;
     private String lastName;

@@ -1,6 +1,6 @@
 package com.hrm.employeeservice.service;
 
-import com.hrm.employeeservice.dto.EmployeeDetails;
+import com.hrm.employeeservice.dto.EmployeeRequest;
 import com.hrm.employeeservice.entity.Address;
 import com.hrm.employeeservice.entity.Department;
 import com.hrm.employeeservice.entity.Employee;
@@ -32,17 +32,17 @@ public class EmployeeService {
     }
 
 
-    public String createEmployee(EmployeeDetails employeeDetails) {
-        Employee employee = mapToEmployee(employeeDetails);
-        Department department = departmentRepository.findById(employeeDetails.getDepartmentId())
+    public String createEmployee(EmployeeRequest employeeRequest) {
+        Employee employee = mapToEmployee(employeeRequest);
+        Department department = departmentRepository.findById(employeeRequest.getDepartmentId())
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Department does not exists with ID: " + employeeDetails.getDepartmentId())
+                        () -> new ResourceNotFoundException("Department does not exists with ID: " + employeeRequest.getDepartmentId())
                 );
         employee.setDepartment(department);
-        Address address = mapToAddress(new Address(), employeeDetails);
+        Address address = mapToAddress(new Address(), employeeRequest);
         Address savedAddress = addressRepository.save(address);
         employee.setAddress(savedAddress);
-        EmploymentHistory employmentHistory = mapToEmploymentHistory(employeeDetails);
+        EmploymentHistory employmentHistory = mapToEmploymentHistory(employeeRequest);
         employmentHistoryRepository.save(employmentHistory);
         employee.setEmploymentHistory(employmentHistory);
         Employee savedEmployee = employeeRepository.save(employee);
@@ -62,24 +62,24 @@ public class EmployeeService {
                 );
     }
 
-    public String updateEmployee(Long id, EmployeeDetails employeeDetails) {
+    public String updateEmployee(Long id, EmployeeRequest employeeRequest) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Employee not exists with ID: " + id)
                 );
-        employee.setFirstName(employeeDetails.getFirstName());
-        employee.setLastName(employeeDetails.getLastName());
-        employee.setEmail(employeeDetails.getEmail());
-        employee.setPhone(employeeDetails.getPhone());
-        employee.setDateOfBirth(employeeDetails.getDateOfBirth());
-        employee.setGender(employeeDetails.getGender());
+        employee.setFirstName(employeeRequest.getFirstName());
+        employee.setLastName(employeeRequest.getLastName());
+        employee.setEmail(employeeRequest.getEmail());
+        employee.setPhone(employeeRequest.getPhone());
+        employee.setDateOfBirth(employeeRequest.getDateOfBirth());
+        employee.setGender(employeeRequest.getGender());
         Address savedAddress = addressRepository.findById(employee.getAddress().getAddressId())
                 .orElseThrow(
                         () -> new ResourceNotFoundException(
                                 "Address does not exists with ID: " + employee.getAddress().getAddressId()
                         )
                 );
-        Address address = mapToAddress(savedAddress, employeeDetails);
+        Address address = mapToAddress(savedAddress, employeeRequest);
         addressRepository.save(address);
         employeeRepository.save(employee);
         return "Employee ID: " + employee.getEmployeeId() + " updated";
@@ -97,30 +97,30 @@ public class EmployeeService {
         return "Employee ID: " + id + " deleted";
     }
 
-    private EmploymentHistory mapToEmploymentHistory(EmployeeDetails employeeDetails){
+    private EmploymentHistory mapToEmploymentHistory(EmployeeRequest employeeRequest){
         EmploymentHistory employmentHistory = new EmploymentHistory();
-        employmentHistory.setStartDate(employeeDetails.getStartDate());
-        employmentHistory.setEndDate(employeeDetails.getEndDate());
-        employmentHistory.setPosition(employeeDetails.getPosition());
-        employmentHistory.setSalary(employeeDetails.getSalary());
+        employmentHistory.setStartDate(employeeRequest.getStartDate());
+        employmentHistory.setEndDate(employeeRequest.getEndDate());
+        employmentHistory.setPosition(employeeRequest.getPosition());
+        employmentHistory.setSalary(employeeRequest.getSalary());
         return employmentHistory;
     }
 
-    private Address mapToAddress(Address address, EmployeeDetails employeeDetails) {
-        address.setCity(employeeDetails.getCity());
-        address.setState(employeeDetails.getState());
-        address.setPinCode(employeeDetails.getPinCode());
+    private Address mapToAddress(Address address, EmployeeRequest employeeRequest) {
+        address.setCity(employeeRequest.getCity());
+        address.setState(employeeRequest.getState());
+        address.setPinCode(employeeRequest.getPinCode());
         return address;
     }
 
-    private Employee mapToEmployee(EmployeeDetails employeeDetails) {
+    private Employee mapToEmployee(EmployeeRequest employeeRequest) {
         Employee employee = new Employee();
-        employee.setFirstName(employeeDetails.getFirstName());
-        employee.setLastName(employeeDetails.getLastName());
-        employee.setEmail(employeeDetails.getEmail());
-        employee.setPhone(employeeDetails.getPhone());
-        employee.setDateOfBirth(employeeDetails.getDateOfBirth());
-        employee.setGender(employeeDetails.getGender());
+        employee.setFirstName(employeeRequest.getFirstName());
+        employee.setLastName(employeeRequest.getLastName());
+        employee.setEmail(employeeRequest.getEmail());
+        employee.setPhone(employeeRequest.getPhone());
+        employee.setDateOfBirth(employeeRequest.getDateOfBirth());
+        employee.setGender(employeeRequest.getGender());
         return employee;
     }
 

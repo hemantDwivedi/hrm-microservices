@@ -1,6 +1,6 @@
 package com.hrm.employeeservice.controller;
 
-import com.hrm.employeeservice.dto.EmployeeDetails;
+import com.hrm.employeeservice.dto.EmployeeRequest;
 import com.hrm.employeeservice.entity.Employee;
 import com.hrm.employeeservice.service.EmployeeService;
 import jakarta.validation.Valid;
@@ -20,7 +20,7 @@ public class EmployeeController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createEmployee(@RequestBody @Valid EmployeeDetails employee){
+    public ResponseEntity<String> createEmployee(@RequestBody @Valid EmployeeRequest employee){
         return new ResponseEntity<>(employeeService.createEmployee(employee), HttpStatus.CREATED);
     }
 
@@ -35,8 +35,8 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateEmployee(@PathVariable Long id, @RequestBody @Valid EmployeeDetails employeeDetails){
-        return new ResponseEntity<>(employeeService.updateEmployee(id, employeeDetails), HttpStatus.OK);
+    public ResponseEntity<String> updateEmployee(@PathVariable Long id, @RequestBody @Valid EmployeeRequest employeeRequest){
+        return new ResponseEntity<>(employeeService.updateEmployee(id, employeeRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
