@@ -1,2 +1,12 @@
-.idea
-hrm-software.iml
+target/
+.idea/
+.project
+.classpath
+.settings/
+*.iml
+*.log
+*.zip
+*.jar
+*.properties
+*.xml
+*.sql
