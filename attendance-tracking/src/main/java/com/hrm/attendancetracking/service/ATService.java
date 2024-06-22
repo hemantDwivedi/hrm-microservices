@@ -1,10 +1,14 @@
 package com.hrm.attendancetracking.service;
 
+import com.hrm.attendancetracking.dto.AttendanceResponse;
+import com.hrm.attendancetracking.dto.EmployeeClient;
 import com.hrm.attendancetracking.exception.ResourceNotFoundException;
 import com.hrm.attendancetracking.model.AttendanceRecord;
 import com.hrm.attendancetracking.repository.AttendanceRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -14,8 +18,10 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ATService {
     private final AttendanceRepository attendanceRepository;
+    private final RestTemplate restTemplate;
 
     public String attendanceEntry(Long employeeId) {
         AttendanceRecord attendanceRecord = AttendanceRecord
@@ -33,13 +39,24 @@ public class ATService {
         return attendanceRepository.findAll();
     }
 
-    public AttendanceRecord getAttendanceById(Integer attendanceId){
-        return
-                attendanceRepository
-                        .findById(attendanceId)
-                        .orElseThrow(
-                                () -> new ResourceNotFoundException("Attendance Record not found ID: " + attendanceId)
-                        );
+    public AttendanceResponse getAttendanceById(Integer attendanceId){
+        AttendanceRecord attendanceRecord = attendanceRepository
+                .findById(attendanceId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException("Attendance Record not found ID: " + attendanceId)
+                );
+
+        // call Employee Service, and get an employee by id
+        EmployeeClient empObj = restTemplate
+                .getForObject(
+                        "http://EMPLOYEE-SERVICE/api/v1/employees/" + attendanceRecord.getEmployeeId(),
+                        EmployeeClient.class
+                );
+        log.info(String.valueOf(empObj));
+
+        AttendanceResponse attendanceResponse = mapToAttendanceResponse(attendanceRecord);
+        attendanceResponse.setEmployee(empObj);
+        return attendanceResponse;
     }
 
     public String recordOutTime(Integer id) throws ParseException {
@@ -79,6 +96,15 @@ public class ATService {
         long mm = timeDiff / (60 * 1000) % 60;
 
         return hh + "H:" + mm + "M";
+    }
+
+    private AttendanceResponse mapToAttendanceResponse(AttendanceRecord attendanceRecord){
+        return AttendanceResponse.builder()
+                .date(attendanceRecord.getDate())
+                .inTime(attendanceRecord.getInTime())
+                .outTime(attendanceRecord.getOutTime())
+                .totalWorkingTime(attendanceRecord.getTotalWorkingTime())
+                .build();
     }
 
 }

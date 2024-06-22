@@ -1,7 +1,7 @@
 package com.hrm.employeeservice.controller;
 
 import com.hrm.employeeservice.dto.EmployeeRequest;
-import com.hrm.employeeservice.entity.Employee;
+import com.hrm.employeeservice.model.Employee;
 import com.hrm.employeeservice.service.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -31,7 +31,7 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id){
-        return new ResponseEntity<>(employeeService.getEmployeeById(id), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.validateEmployee(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

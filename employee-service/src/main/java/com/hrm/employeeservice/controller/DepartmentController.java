@@ -1,6 +1,6 @@
 package com.hrm.employeeservice.controller;
 
-import com.hrm.employeeservice.entity.Department;
+import com.hrm.employeeservice.model.Department;
 import com.hrm.employeeservice.service.DepartmentService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

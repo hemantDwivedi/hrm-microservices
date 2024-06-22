@@ -1,10 +1,10 @@
 package com.hrm.employeeservice.service;
 
 import com.hrm.employeeservice.dto.EmployeeRequest;
-import com.hrm.employeeservice.entity.Address;
-import com.hrm.employeeservice.entity.Department;
-import com.hrm.employeeservice.entity.Employee;
-import com.hrm.employeeservice.entity.EmploymentHistory;
+import com.hrm.employeeservice.model.Address;
+import com.hrm.employeeservice.model.Department;
+import com.hrm.employeeservice.model.Employee;
+import com.hrm.employeeservice.model.EmploymentHistory;
 import com.hrm.employeeservice.exception.ResourceNotFoundException;
 import com.hrm.employeeservice.repository.AddressRepository;
 import com.hrm.employeeservice.repository.DepartmentRepository;
@@ -55,7 +55,7 @@ public class EmployeeService {
                 .findAll();
     }
 
-    public Employee getEmployeeById(Long id) {
+    public Employee validateEmployee(Long id) {
         return employeeRepository.findById(id)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Employee not exists with ID: " + id)
@@ -97,7 +97,7 @@ public class EmployeeService {
         return "Employee ID: " + id + " deleted";
     }
 
-    private EmploymentHistory mapToEmploymentHistory(EmployeeRequest employeeRequest){
+    private EmploymentHistory mapToEmploymentHistory(EmployeeRequest employeeRequest) {
         EmploymentHistory employmentHistory = new EmploymentHistory();
         employmentHistory.setStartDate(employeeRequest.getStartDate());
         employmentHistory.setEndDate(employeeRequest.getEndDate());

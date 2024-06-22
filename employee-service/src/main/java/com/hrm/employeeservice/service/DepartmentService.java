@@ -1,6 +1,6 @@
 package com.hrm.employeeservice.service;
 
-import com.hrm.employeeservice.entity.Department;
+import com.hrm.employeeservice.model.Department;
 import com.hrm.employeeservice.repository.DepartmentRepository;
 import org.springframework.stereotype.Service;
 

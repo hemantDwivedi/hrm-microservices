@@ -1,5 +1,6 @@
 package com.hrm.attendancetracking.model;
 
+import com.hrm.attendancetracking.dto.EmployeeClient;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

@@ -1,6 +1,7 @@
 package com.hrm.attendancetracking.controller;
 
 import com.hrm.attendancetracking.dto.LeaveRequest;
+import com.hrm.attendancetracking.dto.LeaveResponse;
 import com.hrm.attendancetracking.service.LeaveRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,7 +27,7 @@ public class LeaveRequestController {
     }
 
     @GetMapping("/{leaveId}")
-    public ResponseEntity<LeaveRequest> getLeaveById(@PathVariable Integer leaveId){
+    public ResponseEntity<LeaveResponse> getLeaveById(@PathVariable Integer leaveId){
         return ResponseEntity.ok(leaveRequestService.getLeaveById(leaveId));
     }
 }

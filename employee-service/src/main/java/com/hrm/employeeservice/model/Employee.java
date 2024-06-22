@@ -1,4 +1,4 @@
-package com.hrm.employeeservice.entity;
+package com.hrm.employeeservice.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
