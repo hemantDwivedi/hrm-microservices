@@ -1,5 +1,6 @@
 package com.hrm.attendancetracking.controller;
 
+import com.hrm.attendancetracking.dto.AttendanceResponse;
 import com.hrm.attendancetracking.model.AttendanceRecord;
 import com.hrm.attendancetracking.service.ATService;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class AttendanceController {
     }
 
     @GetMapping("/{attendanceId}")
-    public ResponseEntity<AttendanceRecord> getAttendanceById(@PathVariable Integer attendanceId){
+    public ResponseEntity<AttendanceResponse> getAttendanceById(@PathVariable Integer attendanceId){
         return ResponseEntity.ok(atService.getAttendanceById(attendanceId));
     }
 

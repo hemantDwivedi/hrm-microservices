@@ -2,7 +2,7 @@ package com.hrm.employeeservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hrm.employeeservice.dto.EmployeeRequest;
-import com.hrm.employeeservice.entity.Department;
+import com.hrm.employeeservice.model.Department;
 import com.hrm.employeeservice.repository.DepartmentRepository;
 import com.hrm.employeeservice.repository.EmployeeRepository;
 import org.junit.jupiter.api.*;
