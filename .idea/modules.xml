@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/hrm-software.iml" filepath="$PROJECT_DIR$/hrm-software.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/hrm-software.iml" filepath="$PROJECT_DIR$/.idea/hrm-software.iml" />
     </modules>
   </component>
 </project>
