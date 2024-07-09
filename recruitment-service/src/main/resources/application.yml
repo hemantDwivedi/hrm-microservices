@@ -1,0 +1,24 @@
+# port config
+server:
+  port: 8084
+
+# Database config
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/recruitment_db
+    username: root
+    password: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  # Eureka config
+  application:
+    name: recruitment-service
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka
+    register-with-eureka: true
+    fetch-registry: true
