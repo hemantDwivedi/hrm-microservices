@@ -1,7 +1,5 @@
-package com.hrm.recruitmentservice.controller;
+package com.hrm.rs.recruitment;
 
-import com.hrm.recruitmentservice.entity.JobPost;
-import com.hrm.recruitmentservice.service.JobPostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,26 +16,26 @@ public class JobController {
 
     // save job post in database and returns a string message
     @PostMapping
-    public ResponseEntity<String> createJob(@Valid @RequestBody JobPost jobPost){
-        return new ResponseEntity<>(jobPostService.createJobPost(jobPost), HttpStatus.CREATED);
+    public ResponseEntity<String> createJob(@Valid @RequestBody JobPostRequest jobPostRequest){
+        return new ResponseEntity<>(jobPostService.createJobPost(jobPostRequest), HttpStatus.CREATED);
     }
 
     // returns a job post by ID
     @GetMapping("/{id}")
-    public ResponseEntity<JobPost> getJobPostById(@PathVariable Integer id){
+    public ResponseEntity<JobPostResponse> getJobPostById(@PathVariable Integer id){
         return ResponseEntity.ok(jobPostService.getJobPostById(id));
     }
 
     // returns a list of job post
     @GetMapping
-    public ResponseEntity<List<JobPost>> getJobPosts(){
+    public ResponseEntity<List<JobPostResponse>> getJobPosts(){
         return ResponseEntity.ok(jobPostService.getJobPosts());
     }
 
-    // update job post and returns a confirmation message
-    @PutMapping("/{id}")
-    public ResponseEntity<String> createJob(@Valid @RequestBody JobPost jobPost, @PathVariable Integer id){
-        return ResponseEntity.ok(jobPostService.updateJobPost(jobPost, id));
+    // update job post
+    @PutMapping
+    public void updateJobPost(@Valid @RequestBody JobPostRequest jobPostRequest){
+        jobPostService.updateJobPost(jobPostRequest);
     }
 
     // delete a job post and returns a confirmation message
