@@ -1,4 +1,4 @@
-package com.hrm.rs;
+package com.hrm.recruitmentservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

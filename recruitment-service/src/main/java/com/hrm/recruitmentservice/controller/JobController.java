@@ -1,5 +1,8 @@
-package com.hrm.rs.recruitment;
+package com.hrm.recruitmentservice.controller;
 
+import com.hrm.recruitmentservice.dto.request.JobPostRequest;
+import com.hrm.recruitmentservice.dto.response.JobPostResponse;
+import com.hrm.recruitmentservice.service.JobPostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

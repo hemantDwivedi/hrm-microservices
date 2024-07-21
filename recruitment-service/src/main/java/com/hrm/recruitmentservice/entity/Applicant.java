@@ -1,8 +1,11 @@
-package com.hrm.rs.recruitment;
+package com.hrm.recruitmentservice.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
+
+import java.io.Serial;
+import java.io.Serializable;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -10,7 +13,9 @@ import lombok.*;
 @Setter
 @Builder
 @Entity
-public class Applicant {
+public class Applicant implements Serializable {
+    @Serial
+    private static final long serialVersionUID = 214101981905645865L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

@@ -1,5 +1,8 @@
-package com.hrm.rs.recruitment;
+package com.hrm.recruitmentservice.helper;
 
+import com.hrm.recruitmentservice.dto.request.ApplicantRequest;
+import com.hrm.recruitmentservice.dto.response.ApplicantResponse;
+import com.hrm.recruitmentservice.entity.Applicant;
 import org.springframework.stereotype.Service;
 
 @Service

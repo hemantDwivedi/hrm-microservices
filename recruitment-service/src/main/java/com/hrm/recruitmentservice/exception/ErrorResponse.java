@@ -1,4 +1,4 @@
-package com.hrm.rs.exception;
+package com.hrm.recruitmentservice.exception;
 
 import java.util.Map;
 

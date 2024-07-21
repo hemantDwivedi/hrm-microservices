@@ -1,8 +1,10 @@
-package com.hrm.rs.recruitment;
+package com.hrm.recruitmentservice.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import java.io.Serializable;
 
 public record ApplicantRequest(
         Integer id,
@@ -22,5 +24,5 @@ public record ApplicantRequest(
         String location,
         @NotBlank(message = "Status should not be Blank")
         String status
-) {
+) implements Serializable {
 }

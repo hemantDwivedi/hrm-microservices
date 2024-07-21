@@ -1,4 +1,8 @@
-package com.hrm.rs.recruitment;
+package com.hrm.recruitmentservice.dto.response;
+
+import com.hrm.recruitmentservice.entity.JobPost;
+
+import java.io.Serializable;
 
 public record ApplicantResponse(
         Integer id,
@@ -10,5 +14,5 @@ public record ApplicantResponse(
         String location,
         String status,
         JobPost job
-) {
+) implements Serializable {
 }

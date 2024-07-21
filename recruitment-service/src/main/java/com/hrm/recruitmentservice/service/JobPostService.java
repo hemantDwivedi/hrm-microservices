@@ -1,7 +1,15 @@
-package com.hrm.rs.recruitment;
+package com.hrm.recruitmentservice.service;
 
-import com.hrm.rs.exception.ResourceNotFoundException;
+import com.hrm.recruitmentservice.dto.request.JobPostRequest;
+import com.hrm.recruitmentservice.dto.response.JobPostResponse;
+import com.hrm.recruitmentservice.entity.JobPost;
+import com.hrm.recruitmentservice.exception.ResourceNotFoundException;
+import com.hrm.recruitmentservice.helper.JobPostMapper;
+import com.hrm.recruitmentservice.repository.JobPostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,6 +31,7 @@ public class JobPostService {
     }
 
     // fetch job post by job post ID
+    @Cacheable(value = "job", key = "#id")
     public JobPostResponse getJobPostById(Integer id) {
         var jobPost = jobPostRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(
@@ -33,6 +42,7 @@ public class JobPostService {
     }
 
     // fetch all job posts
+    @Cacheable(value = "job")
     public List<JobPostResponse> getJobPosts() {
         return jobPostRepository
                 .findAll()
@@ -55,12 +65,10 @@ public class JobPostService {
     }
 
     // delete a job post by job post ID
+    @Caching(evict = {@CacheEvict(value = "job", allEntries = true), @CacheEvict(value = "job", key = "#id")})
     public String deleteJobPost(Integer id) {
-        JobPost jobPost = jobPostRepository.findById(id).orElseThrow(
-                () -> new ResourceNotFoundException("Job post not found ID: " + id)
-        );
-        jobPostRepository.delete(jobPost);
-        return "Job post deleted with ID: " + id;
+        jobPostRepository.deleteById(id);
+        return "Job ID:: " + id + " deleted";
     }
 
     // This method make sures to not override existing data properties with null/empty values

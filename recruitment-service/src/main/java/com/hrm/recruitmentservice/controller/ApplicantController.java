@@ -1,5 +1,8 @@
-package com.hrm.rs.recruitment;
+package com.hrm.recruitmentservice.controller;
 
+import com.hrm.recruitmentservice.dto.request.ApplicantRequest;
+import com.hrm.recruitmentservice.dto.response.ApplicantResponse;
+import com.hrm.recruitmentservice.service.ApplicantService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,12 +35,6 @@ public class ApplicantController {
     public ResponseEntity<List<ApplicantResponse>> findAllApplicants(){
         return ResponseEntity.ok(applicantService.findAllApplicants());
     }
-
-    // update job post
-//    @PutMapping("/applicants")
-//    public void updateJobPost(@Valid @RequestBody ApplicantRequest applicantRequest){
-//        applicantService.updateApplicant(applicantRequest);
-//    }
 
     // delete a job post and returns a confirmation message
     @DeleteMapping("/applicants/{id}")
