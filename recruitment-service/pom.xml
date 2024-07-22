@@ -84,6 +84,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>recruitment-module</finalName>
     </build>
 
 </project>
