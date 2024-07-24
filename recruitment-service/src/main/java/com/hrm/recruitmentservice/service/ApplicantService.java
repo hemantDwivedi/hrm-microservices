@@ -49,9 +49,15 @@ public class ApplicantService {
     }
 
     @Cacheable(value = "applicant")
-    public List<ApplicantResponse> findAllApplicants() {
+    public List<ApplicantResponse> findAllApplicantsByJobId(Integer jobId) {
+        var jobPost = jobPostRepository.findById(jobId)
+                .orElseThrow(
+                        () -> new ResourceNotFoundException(
+                                format("Job ID::%s not found", jobId)
+                        )
+                );
         return applicantRepository
-                .findAll()
+                .findByJobPost(jobPost)
                 .stream()
                 .map(mapper::toApplicantResponse)
                 .collect(Collectors.toList());

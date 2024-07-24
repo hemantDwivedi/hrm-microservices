@@ -20,7 +20,7 @@ spring:
     type: redis
     redis:
       cache-null-values: true
-      time-to-live: 600000
+      time-to-live: 6000
 
   # Eureka config
   application:

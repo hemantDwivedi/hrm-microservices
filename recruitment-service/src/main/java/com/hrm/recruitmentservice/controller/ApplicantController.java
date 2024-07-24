@@ -17,26 +17,26 @@ import java.util.List;
 public class ApplicantController {
     private final ApplicantService applicantService;
 
-    // save job post in database and returns a string message
+    // save applicant, returns a applicant ID
     @PostMapping("/{jobId}/applicants")
     public ResponseEntity<Integer> createJob(@Valid @RequestBody ApplicantRequest applicantRequest,
                                              @PathVariable("jobId") Integer jobId){
         return new ResponseEntity<>(applicantService.createApplicant(jobId, applicantRequest), HttpStatus.CREATED);
     }
 
-    // returns a job post by ID
+    // returns an applicant by ID
     @GetMapping("/applicants/{applicantId}")
     public ResponseEntity<ApplicantResponse> findById(@PathVariable("applicantId") Integer id){
         return ResponseEntity.ok(applicantService.findApplicantById(id));
     }
 
-    // returns a list of job post
-    @GetMapping("/applicants")
-    public ResponseEntity<List<ApplicantResponse>> findAllApplicants(){
-        return ResponseEntity.ok(applicantService.findAllApplicants());
+    // returns a list of applicants by job post
+    @GetMapping("/{jobId}/applicants")
+    public ResponseEntity<List<ApplicantResponse>> findAllApplicantsByJobId(@PathVariable Integer jobId){
+        return ResponseEntity.ok(applicantService.findAllApplicantsByJobId(jobId));
     }
 
-    // delete a job post and returns a confirmation message
+    // delete an applicant
     @DeleteMapping("/applicants/{id}")
     public void deleteJobPostById(@PathVariable Integer id){
         applicantService.deleteApplicant(id);

@@ -42,6 +42,6 @@ public class Applicant implements Serializable {
     private String status;
 
     @ManyToOne
-    @JoinColumn(name = "job_post_id")
+    @JoinColumn(name = "fk_job_post")
     private JobPost jobPost;
 }
