@@ -41,7 +41,7 @@ public class Applicant implements Serializable {
 
     private String status;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "job_post_id")
     private JobPost jobPost;
 }

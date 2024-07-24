@@ -1,7 +1,5 @@
 package com.hrm.recruitmentservice.dto.response;
 
-import com.hrm.recruitmentservice.entity.JobPost;
-
 import java.io.Serializable;
 
 public record ApplicantResponse(
@@ -12,7 +10,6 @@ public record ApplicantResponse(
         String phone,
         String resumeUrl,
         String location,
-        String status,
-        JobPost job
+        String status
 ) implements Serializable {
 }

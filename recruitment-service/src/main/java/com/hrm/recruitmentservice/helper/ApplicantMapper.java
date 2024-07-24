@@ -30,8 +30,7 @@ public class ApplicantMapper {
                 applicant.getPhone(),
                 applicant.getResumeUrl(),
                 applicant.getLocation(),
-                applicant.getStatus(),
-                applicant.getJobPost()
+                applicant.getStatus()
         );
     }
 }
