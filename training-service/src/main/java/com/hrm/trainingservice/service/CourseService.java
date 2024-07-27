@@ -6,6 +6,7 @@ import com.hrm.trainingservice.repository.CourseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static java.lang.String.format;
@@ -62,6 +63,16 @@ public class CourseService {
     public String deleteCourse(Long id){
         courseRepository.deleteById(id);
         return String.format("Course::%s Deleted!",id);
+    }
+
+    public void updateEndDate(Long id, String endDate){
+        Course dbCourse = courseRepository.findById(id).orElseThrow(
+                () -> new ResourceNotFoundException(
+                        format("Course::%s not found", id)
+                )
+        );
+        dbCourse.setEndDate(LocalDate.parse(endDate));
+        courseRepository.save(dbCourse);
     }
 
     private void mergeCourse(Course dbCourse, Course reqCourse){

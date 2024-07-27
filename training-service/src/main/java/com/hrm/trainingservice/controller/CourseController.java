@@ -49,4 +49,10 @@ public class CourseController {
     public ResponseEntity<String> deleteCourse(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(courseService.deleteCourse(id));
     }
+
+    @PatchMapping("/course-id/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateCourseEndDate(@RequestParam("endDate") String endDate, @PathVariable Long id){
+        courseService.updateEndDate(id, endDate);
+    }
 }
