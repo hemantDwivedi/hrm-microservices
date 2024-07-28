@@ -1,5 +1,6 @@
 package com.hrm.trainingservice.service;
 
+import com.hrm.trainingservice.client.ApiClient;
 import com.hrm.trainingservice.entity.Course;
 import com.hrm.trainingservice.entity.Enrollment;
 import com.hrm.trainingservice.exception.ResourceNotFoundException;
@@ -17,8 +18,11 @@ import static java.lang.String.format;
 public class EnrollmentService {
     private final EnrollmentRepository enrollmentRepository;
     private final CourseRepository courseRepository;
+    private final ApiClient apiClient;
 
     public String create(Enrollment enrollment, Long empId, Long courseId){
+        Boolean employee = apiClient.existById(empId);
+        if (!employee) throw new ResourceNotFoundException("Employee not found");
         Course course = courseRepository.findById(courseId).orElseThrow(
                 () -> new ResourceNotFoundException(
                         format("Course not found::%s", courseId)
