@@ -21,3 +21,13 @@ spring:
       hibernate:
         format_sql: true
     show-sql: true
+
+# eureka config
+eureka:
+  instance:
+    client:
+      serverURL:
+        defaultZone: http://localhost:8761/eureka/
+  client:
+    register-with-eureka: true
+    fetch-registry: true
