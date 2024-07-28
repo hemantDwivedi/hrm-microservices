@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/employees")
 public class EmployeeController {
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
 
     public EmployeeController(EmployeeService employeeService) {
         this.employeeService = employeeService;
@@ -31,7 +31,12 @@ public class EmployeeController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Employee> getEmployeeById(@PathVariable Long id){
-        return new ResponseEntity<>(employeeService.validateEmployee(id), HttpStatus.OK);
+        return new ResponseEntity<>(employeeService.getById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("exists/{id}")
+    public ResponseEntity<Boolean> existById(@PathVariable Long id){
+        return new ResponseEntity<>(employeeService.existById(id), HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

@@ -13,13 +13,14 @@ import com.hrm.employeeservice.repository.EmploymentHistoryRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
-    private EmployeeRepository employeeRepository;
-    private AddressRepository addressRepository;
-    private DepartmentRepository departmentRepository;
-    private EmploymentHistoryRepository employmentHistoryRepository;
+    private final EmployeeRepository employeeRepository;
+    private final AddressRepository addressRepository;
+    private final DepartmentRepository departmentRepository;
+    private final EmploymentHistoryRepository employmentHistoryRepository;
 
     public EmployeeService(EmployeeRepository employeeRepository,
                            AddressRepository addressRepository,
@@ -55,11 +56,15 @@ public class EmployeeService {
                 .findAll();
     }
 
-    public Employee validateEmployee(Long id) {
+    public Employee getById(Long id) {
         return employeeRepository.findById(id)
                 .orElseThrow(
                         () -> new ResourceNotFoundException("Employee not exists with ID: " + id)
                 );
+    }
+
+    public Boolean existById(Long id){
+        return employeeRepository.existsById(id);
     }
 
     public String updateEmployee(Long id, EmployeeRequest employeeRequest) {
