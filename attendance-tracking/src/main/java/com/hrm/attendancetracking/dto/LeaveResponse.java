@@ -1,19 +1,19 @@
 package com.hrm.attendancetracking.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+import java.time.LocalDate;
+
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class LeaveResponse {
-    private String startDate;
-    private String endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String leaveType;
-    private String status;
     private String reason;
-    private EmployeeClient employee;
+    private boolean accept;
+    private boolean active;
 }

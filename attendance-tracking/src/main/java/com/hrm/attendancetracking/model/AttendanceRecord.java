@@ -1,24 +1,27 @@
 package com.hrm.attendancetracking.model;
 
-import com.hrm.attendancetracking.dto.EmployeeClient;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 @Entity
-@Data
-@Builder
-@NoArgsConstructor
+@Getter
+@Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AttendanceRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer attendanceId;
-    private String date;
-    private String inTime;
-    private String outTime;
-    private String totalWorkingTime;
+    private LocalDate date;
+    private LocalTime clockIn;
+    private LocalTime clockOut;
+    private LocalTime productive;
     private Long employeeId;
 }

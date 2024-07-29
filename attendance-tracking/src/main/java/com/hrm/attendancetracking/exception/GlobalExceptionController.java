@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Objects;
 
 @ControllerAdvice
@@ -18,6 +20,8 @@ public class GlobalExceptionController {
                 ResponseEntity<>(
                 new ApiError(
                         HttpStatus.NOT_FOUND,
+                        LocalDate.now(),
+                        LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute()),
                         exception.getLocalizedMessage(),
                         request.getDescription(false)
                 ),
@@ -31,6 +35,8 @@ public class GlobalExceptionController {
                 ResponseEntity<>(
                         new ApiError(
                                 HttpStatus.BAD_REQUEST,
+                                LocalDate.now(),
+                                LocalTime.of(LocalTime.now().getHour(), LocalTime.now().getMinute()),
                                 Objects.requireNonNull(exception.getFieldError()).getDefaultMessage(),
                                 request.getDescription(false)
                         ),

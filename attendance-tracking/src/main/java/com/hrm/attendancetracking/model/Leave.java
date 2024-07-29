@@ -4,25 +4,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "leave_requests")
-@Data
 @Builder
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Leave {
     @Id
     @GeneratedValue
-    private Integer leaveRequestId;
-    private String startDate;
-    private String endDate;
+    private Integer id;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private String leaveType;
-    private String status;
     private String reason;
+    private boolean accept;
+    private boolean active;
     private Long employeeId;
 }
