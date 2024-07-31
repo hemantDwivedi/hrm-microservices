@@ -14,4 +14,5 @@ public class LeaveRequest {
     private LocalDate endDate;
     private String leaveType;
     private String reason;
+    private Long employeeId;
 }
