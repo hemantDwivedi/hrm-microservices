@@ -35,10 +35,10 @@ public class PayrollService {
         ));
     }
 
-    public PayrollRecord createPayroll(PayrollRecord payrollRecord, Long id) {
-        Boolean employee = apiClient.existById(id);
+    public PayrollRecord createPayroll(PayrollRecord payrollRecord) {
+        Boolean employee = apiClient.existById(payrollRecord.getEmployeeId());
         if (!employee) throw new ResourceNotFoundException("Employee not found");
-        payrollRecord.setEmployeeId(id);
+        payrollRecord.setEmployeeId(payrollRecord.getEmployeeId());
         return payrollRepository.save(payrollRecord);
     }
 

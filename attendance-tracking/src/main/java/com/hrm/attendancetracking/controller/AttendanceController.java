@@ -1,42 +1,45 @@
 package com.hrm.attendancetracking.controller;
 
-import com.hrm.attendancetracking.dto.AttendanceResponse;
+import com.hrm.attendancetracking.dto.request.AttendanceRequest;
+import com.hrm.attendancetracking.dto.response.AttendanceResponse;
+import com.hrm.attendancetracking.dto.response.ListResponse;
 import com.hrm.attendancetracking.service.ATService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/v1/employees")
+@RequestMapping("/v1/attendances")
 @RequiredArgsConstructor
+@Slf4j
 public class AttendanceController {
     private final ATService atService;
 
-    @PostMapping("/{employeeId}/attendances")
-    public ResponseEntity<String> attendanceEntry(@PathVariable Long employeeId){
-        return new ResponseEntity<>(atService.attendanceEntry(employeeId), HttpStatus.CREATED);
+    @PostMapping
+    public ResponseEntity<String> attendanceEntry(@RequestBody AttendanceRequest attendanceRequest){
+        log.info("Attendance Entry");
+        return new ResponseEntity<>(atService.attendanceEntry(attendanceRequest.getEmployeeId()), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{employeeId}/attendances")
-    public ResponseEntity<List<AttendanceResponse>> getAllAttendance(@PathVariable Long employeeId){
-        return ResponseEntity.ok(atService.getAllAttendance(employeeId));
+    @GetMapping
+    public ResponseEntity<ListResponse> getAllAttendance(@RequestBody AttendanceRequest attendanceRequest){
+        return ResponseEntity.ok(atService.getAllAttendance(attendanceRequest.getEmployeeId()));
     }
 
-    @GetMapping("/{employeeId}/attendances/{attendanceId}")
-    public ResponseEntity<AttendanceResponse> getAttendanceById(@PathVariable Long employeeId, @PathVariable Integer attendanceId){
-        return ResponseEntity.ok(atService.getAttendanceById(employeeId, attendanceId));
+    @GetMapping("/{id}")
+    public ResponseEntity<AttendanceResponse> getAttendanceById(@PathVariable Integer id){
+        return ResponseEntity.ok(atService.getAttendanceById(id));
     }
 
-    @PatchMapping("/{employeeId}/attendances/{id}")
-    public void clockOutTime(@PathVariable Long employeeId, @PathVariable Integer id) {
-        atService.clockOut(employeeId, id);
+    @PatchMapping("/{id}")
+    public void clockOutTime(@PathVariable Integer id) {
+        atService.clockOut(id);
     }
 
-    @DeleteMapping("/{employeeId}/attendances/{attendanceId}")
-    public void deleteAttendance(@PathVariable Long employeeId, @PathVariable Integer attendanceId){
-        atService.deleteAttendanceRecord(employeeId, attendanceId);
+    @DeleteMapping("/{id}")
+    public void deleteAttendance(@PathVariable Integer id){
+        atService.deleteAttendanceRecord(id);
     }
 }

@@ -1,4 +1,4 @@
-package com.hrm.attendancetracking.dto;
+package com.hrm.attendancetracking.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

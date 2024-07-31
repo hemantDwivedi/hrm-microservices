@@ -1,6 +1,7 @@
 package com.hrm.trainingservice.service;
 
 import com.hrm.trainingservice.client.ApiClient;
+import com.hrm.trainingservice.dto.request.EnrollmentRequest;
 import com.hrm.trainingservice.entity.Course;
 import com.hrm.trainingservice.entity.Enrollment;
 import com.hrm.trainingservice.exception.ResourceNotFoundException;
@@ -20,21 +21,26 @@ public class EnrollmentService {
     private final CourseRepository courseRepository;
     private final ApiClient apiClient;
 
-    public String create(Enrollment enrollment, Long empId, Long courseId){
-        Boolean employee = apiClient.existById(empId);
-        if (!employee) throw new ResourceNotFoundException("Employee not found");
-        Course course = courseRepository.findById(courseId).orElseThrow(
+    public String create(EnrollmentRequest enrollmentRequest) {
+        Boolean employee = apiClient.existById(enrollmentRequest.getEmployeeId());
+        if (!employee)
+            throw new ResourceNotFoundException(format("Employee::%s not found", enrollmentRequest.getEmployeeId()));
+        Course course = courseRepository.findById(enrollmentRequest.getCourseId()).orElseThrow(
                 () -> new ResourceNotFoundException(
-                        format("Course not found::%s", courseId)
+                        format("Course not found::%s", enrollmentRequest.getCourseId())
                 )
         );
-        enrollment.setCourse(course);
-        enrollment.setEmployeeId(empId);
+        Enrollment enrollment = Enrollment.builder()
+                .enrollmentDate(enrollmentRequest.getEnrollmentDate())
+                .completionStatus(enrollmentRequest.getCompletionStatus())
+                .employeeId(enrollmentRequest.getEmployeeId())
+                .course(course)
+                .build();
         Enrollment dbEnrollment = enrollmentRepository.save(enrollment);
         return format("Enrollment ID:: %s", dbEnrollment.getId());
     }
 
-    public Enrollment getEnrollmentById(Integer id){
+    public Enrollment getEnrollmentById(Integer id) {
         return enrollmentRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException(
                         format("Enrollment not found::%s", id)
@@ -42,16 +48,18 @@ public class EnrollmentService {
         );
     }
 
-    public List<Enrollment> getAllEnrollments(Long empId){
+    public List<Enrollment> getAllEnrollments(Long empId) {
         List<Enrollment> enrollments = enrollmentRepository.findByEmployeeId(empId);
         if (enrollments.isEmpty()) throw new ResourceNotFoundException(
-                "Enrollment not found"
+                format("Enrollments:: %s not found", empId)
         );
         return enrollments;
     }
 
-    public String delete(Integer id){
-        enrollmentRepository.deleteById(id);
-        return format("Enrollment:: %s deleted!", id);
+    public void delete(Integer id) {
+        if (enrollmentRepository.existsById(id)) enrollmentRepository.deleteById(id);
+        else  throw new ResourceNotFoundException(
+                format("Enrollment:: %s not found", id)
+        );
     }
 }

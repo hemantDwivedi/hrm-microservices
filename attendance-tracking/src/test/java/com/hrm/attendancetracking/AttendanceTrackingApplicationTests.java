@@ -1,7 +1,7 @@
 package com.hrm.attendancetracking;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.hrm.attendancetracking.dto.LeaveRequest;
+import com.hrm.attendancetracking.dto.request.LeaveRequest;
 import com.hrm.attendancetracking.repository.AttendanceRepository;
 import com.hrm.attendancetracking.repository.LeaveRepository;
 import org.junit.jupiter.api.MethodOrderer;

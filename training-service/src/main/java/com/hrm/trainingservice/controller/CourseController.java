@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/courses")
+@RequestMapping("/v1/courses")
 @RequiredArgsConstructor
 public class CourseController {
     private final CourseService courseService;
@@ -25,7 +25,7 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(courseService.getAllCourses());
     }
 
-    @GetMapping("/course-id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK).body(courseService.getCourseById(id));
     }
@@ -50,8 +50,7 @@ public class CourseController {
         return ResponseEntity.status(HttpStatus.OK).body(courseService.deleteCourse(id));
     }
 
-    @PatchMapping("/course-id/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}")
     public void updateCourseEndDate(@RequestParam("endDate") String endDate, @PathVariable Long id){
         courseService.updateEndDate(id, endDate);
     }

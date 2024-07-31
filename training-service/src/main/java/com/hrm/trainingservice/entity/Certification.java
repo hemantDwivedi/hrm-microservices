@@ -10,6 +10,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
+@Builder
 public class Certification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,45 +10,37 @@ import com.hrm.employeeservice.repository.AddressRepository;
 import com.hrm.employeeservice.repository.DepartmentRepository;
 import com.hrm.employeeservice.repository.EmployeeRepository;
 import com.hrm.employeeservice.repository.EmploymentHistoryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
+import static java.lang.String.*;
 
 @Service
+@RequiredArgsConstructor
 public class EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final AddressRepository addressRepository;
     private final DepartmentRepository departmentRepository;
     private final EmploymentHistoryRepository employmentHistoryRepository;
 
-    public EmployeeService(EmployeeRepository employeeRepository,
-                           AddressRepository addressRepository,
-                           DepartmentRepository departmentRepository,
-                           EmploymentHistoryRepository employmentHistoryRepository) {
-        this.employeeRepository = employeeRepository;
-        this.addressRepository = addressRepository;
-        this.departmentRepository = departmentRepository;
-        this.employmentHistoryRepository = employmentHistoryRepository;
-    }
-
-
     public String createEmployee(EmployeeRequest employeeRequest) {
         Employee employee = mapToEmployee(employeeRequest);
         Department department = departmentRepository.findById(employeeRequest.getDepartmentId())
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Department does not exists with ID: " + employeeRequest.getDepartmentId())
-                );
+                        () -> new ResourceNotFoundException(format("Department ID: %s not found", employeeRequest.getDepartmentId()))
+                        );
         employee.setDepartment(department);
         Address address = mapToAddress(new Address(), employeeRequest);
         Address savedAddress = addressRepository.save(address);
         employee.setAddress(savedAddress);
         EmploymentHistory employmentHistory = mapToEmploymentHistory(employeeRequest);
-        employmentHistoryRepository.save(employmentHistory);
-        employee.setEmploymentHistory(employmentHistory);
+        EmploymentHistory dbEmploymentHistory = employmentHistoryRepository.save(employmentHistory);
+        employee.setEmploymentHistory(dbEmploymentHistory);
         Employee savedEmployee = employeeRepository.save(employee);
 
-        return "Employee created with ID: " + savedEmployee.getEmployeeId();
+        return format("Employee ID: %s created!", savedEmployee.getEmployeeId());
     }
 
     public List<Employee> getEmployeeList() {
@@ -59,18 +51,18 @@ public class EmployeeService {
     public Employee getById(Long id) {
         return employeeRepository.findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Employee not exists with ID: " + id)
+                        () -> new ResourceNotFoundException(format("Employee ID: %s not found", id))
                 );
     }
 
-    public Boolean existById(Long id){
+    public Boolean existById(Long id) {
         return employeeRepository.existsById(id);
     }
 
     public String updateEmployee(Long id, EmployeeRequest employeeRequest) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Employee not exists with ID: " + id)
+                        () -> new ResourceNotFoundException(format("Employee ID: %s not found", id))
                 );
         employee.setFirstName(employeeRequest.getFirstName());
         employee.setLastName(employeeRequest.getLastName());
@@ -93,7 +85,7 @@ public class EmployeeService {
     public String deleteEmployee(Long id) {
         Employee employee = employeeRepository.findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Employee does not exists with ID: " + id)
+                        () -> new ResourceNotFoundException(format("Employee ID: %s not found", id))
                 );
         if (employee.getAddress() != null) {
             addressRepository.delete(employee.getAddress());

@@ -4,6 +4,7 @@ import com.hrm.employeeservice.dto.EmployeeRequest;
 import com.hrm.employeeservice.model.Employee;
 import com.hrm.employeeservice.service.EmployeeService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/employees")
+@RequestMapping("/v1/employees")
+@RequiredArgsConstructor
 public class EmployeeController {
     private final EmployeeService employeeService;
-
-    public EmployeeController(EmployeeService employeeService) {
-        this.employeeService = employeeService;
-    }
 
     @PostMapping
     public ResponseEntity<String> createEmployee(@RequestBody @Valid EmployeeRequest employee){

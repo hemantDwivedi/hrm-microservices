@@ -1,63 +1,62 @@
 package com.hrm.attendancetracking.controller;
 
-import com.hrm.attendancetracking.dto.LeaveRequest;
-import com.hrm.attendancetracking.dto.LeaveResponse;
+import com.hrm.attendancetracking.dto.request.LeaveRequest;
+import com.hrm.attendancetracking.dto.response.LeaveResponse;
+import com.hrm.attendancetracking.dto.response.ListResponse;
 import com.hrm.attendancetracking.service.LeaveRequestService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/v1/employees")
+@RequestMapping("/v1/leaves")
 @RequiredArgsConstructor
 public class LeaveRequestController {
     private final LeaveRequestService leaveRequestService;
 
-    @PostMapping("/{employeeId}/leaves")
-    public ResponseEntity<String> leaveRequest(@RequestBody LeaveRequest leaveRequest, @PathVariable Long employeeId){
-        return new ResponseEntity<>(leaveRequestService.createLeaveRequest(leaveRequest, employeeId), HttpStatus.CREATED);
+    @PostMapping
+    public ResponseEntity<String> leaveRequest(@RequestBody LeaveRequest leaveRequest){
+        return new ResponseEntity<>(leaveRequestService.createLeaveRequest(leaveRequest), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{employeeId}/leaves")
-    public ResponseEntity<List<LeaveResponse>> getLeaveRequests(@PathVariable Long employeeId){
-        return ResponseEntity.ok(leaveRequestService.getLeaveRequests(employeeId));
+    @GetMapping("/eId/{id}")
+    public ResponseEntity<ListResponse> getLeaveRequests(@PathVariable Long id){
+        return ResponseEntity.ok(leaveRequestService.getLeaveRequests(id));
     }
 
-    @GetMapping("/{employeeId}/leaves/{leaveId}")
-    public ResponseEntity<LeaveResponse> getLeaveById(@PathVariable Long employeeId, @PathVariable Integer leaveId){
-        return ResponseEntity.ok(leaveRequestService.getLeaveById(employeeId, leaveId));
+    @GetMapping("/{leaveId}")
+    public ResponseEntity<LeaveResponse> getLeaveById(@PathVariable Integer leaveId){
+        return ResponseEntity.ok(leaveRequestService.getLeaveById(leaveId));
     }
 
-    @PatchMapping("/{employeeId}/leaves/{leaveId}/accept")
-    public void acceptLeave(@PathVariable Long employeeId, @PathVariable Integer leaveId){
-        leaveRequestService.acceptLeave(employeeId, leaveId);
+    @PatchMapping("/{leaveId}/accept")
+    public void acceptLeave(@PathVariable Integer leaveId){
+        leaveRequestService.acceptLeave(leaveId);
     }
 
-    @PatchMapping("/{employeeId}/leaves/{leaveId}/refuse")
-    public void refuseLeave(@PathVariable Long employeeId, @PathVariable Integer leaveId){
-        leaveRequestService.refuseLeave(employeeId, leaveId);
+    @PatchMapping("/{leaveId}/refuse")
+    public void refuseLeave(@PathVariable Integer leaveId){
+        leaveRequestService.refuseLeave(leaveId);
     }
 
-    @PatchMapping("/{employeeId}/leaves/{leaveId}/active")
-    public void activeLeave(@PathVariable Long employeeId, @PathVariable Integer leaveId){
-        leaveRequestService.activeLeave(employeeId, leaveId);
+    @PatchMapping("/{leaveId}/active")
+    public void activeLeave(@PathVariable Integer leaveId){
+        leaveRequestService.activeLeave(leaveId);
     }
 
-    @PatchMapping("/{employeeId}/leaves/{leaveId}/inactive")
-    public void inactiveLeave(@PathVariable Long employeeId, @PathVariable Integer leaveId){
-        leaveRequestService.inactiveLeave(employeeId, leaveId);
+    @PatchMapping("/{leaveId}/inactive")
+    public void inactiveLeave(@PathVariable Integer leaveId){
+        leaveRequestService.inactiveLeave(leaveId);
     }
 
-    @PutMapping("/{employeeId}/leaves/{leaveId}")
-    public void update(@PathVariable Long employeeId, @PathVariable Integer leaveId, @RequestBody LeaveRequest leaveRequest){
-        leaveRequestService.update(employeeId, leaveId, leaveRequest);
+    @PutMapping("/{leaveId}")
+    public void update(@PathVariable Integer leaveId, @RequestBody LeaveRequest leaveRequest){
+        leaveRequestService.update(leaveId, leaveRequest);
     }
 
-    @DeleteMapping("/{employeeId}/leaves/{leaveId}")
-    public void delete(@PathVariable Long employeeId, @PathVariable Integer leaveId){
-        leaveRequestService.delete(employeeId, leaveId);
+    @DeleteMapping("/{leaveId}")
+    public void delete(@PathVariable Integer leaveId){
+        leaveRequestService.delete(leaveId);
     }
 }

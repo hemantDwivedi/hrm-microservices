@@ -1,15 +1,18 @@
 package com.hrm.attendancetracking.service;
 
 import com.hrm.attendancetracking.client.ApiClient;
-import com.hrm.attendancetracking.dto.LeaveRequest;
-import com.hrm.attendancetracking.dto.LeaveResponse;
+import com.hrm.attendancetracking.dto.request.LeaveRequest;
+import com.hrm.attendancetracking.dto.response.LeaveResponse;
+import com.hrm.attendancetracking.dto.response.ListResponse;
 import com.hrm.attendancetracking.exception.ResourceNotFoundException;
 import com.hrm.attendancetracking.model.Leave;
 import com.hrm.attendancetracking.repository.LeaveRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.lang.String.*;
 
 @Service
 @RequiredArgsConstructor
@@ -17,42 +20,37 @@ public class LeaveRequestService {
     private final LeaveRepository leaveRepository;
     private final ApiClient apiClient;
 
-    public String createLeaveRequest(LeaveRequest leaveRequest, Long employeeId) {
-        Boolean employee = apiClient.existById(employeeId);
-        if (!employee) throw new ResourceNotFoundException("Employee not found");
+    public String createLeaveRequest(LeaveRequest leaveRequest) {
+        Boolean employee = apiClient.existById(leaveRequest.getEmployeeId());
+        if (!employee)
+            throw new ResourceNotFoundException(format("Employee ID: %s not found", leaveRequest.getEmployeeId()));
         Leave leave = mapToLeave(leaveRequest);
-        leave.setEmployeeId(employeeId);
         Leave leaveCreated = leaveRepository.save(leave);
-        return "Leave request submitted ID: " + leaveCreated.getId();
+        return format("Request submitted Leave ID: %s", leaveCreated.getId());
     }
 
-    public List<LeaveResponse> getLeaveRequests(Long id) {
-        return
-                leaveRepository
-                        .findByEmployeeId(id)
-                        .stream().map(
-                                this::mapToLeaveResponse
-                        )
-                        .toList();
+    public ListResponse getLeaveRequests(Long id) {
+        return new ListResponse(leaveRepository
+                .findByEmployeeId(id)
+                .stream().map(this::mapToLeaveResponse)
+                .collect(Collectors.toList()));
     }
 
-    public LeaveResponse getLeaveById(Long employeeId, Integer id) {
+    public LeaveResponse getLeaveById(Integer id) {
         Leave leave = leaveRepository
                 .findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Leave request record not found ID: " + id)
+                        () -> new ResourceNotFoundException(format("Leave ID: %s not found", id))
                 );
-        if (!leave.getEmployeeId().equals(employeeId)) throw new ResourceNotFoundException("Employee ID did not match");
         return mapToLeaveResponse(leave);
     }
 
-    public void update(Long eId, Integer lId, LeaveRequest leaveRequest){
+    public void update(Integer id, LeaveRequest leaveRequest) {
         Leave leave = leaveRepository
-                .findById(lId)
+                .findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Leave request record not found ID: " + lId)
+                        () -> new ResourceNotFoundException(format("Leave ID: %s not found", id))
                 );
-        if (!leave.getEmployeeId().equals(eId)) throw new ResourceNotFoundException("Employee ID did not match");
         leave.setStartDate(leaveRequest.getStartDate());
         leave.setEndDate(leaveRequest.getEndDate());
         leave.setLeaveType(leaveRequest.getLeaveType());
@@ -60,56 +58,47 @@ public class LeaveRequestService {
         leaveRepository.save(leave);
     }
 
-    public void delete(Long eId, Integer lId){
-        Leave leave = leaveRepository
-                .findById(lId)
-                .orElseThrow(
-                        () -> new ResourceNotFoundException("Leave request record not found ID: " + lId)
-                );
-        if (!leave.getEmployeeId().equals(eId)) throw new ResourceNotFoundException("Employee ID did not match");
-        leaveRepository.delete(leave);
+    public void delete(Integer id) {
+        if (leaveRepository.existsById(id)) leaveRepository.deleteById(id);
+        else throw new ResourceNotFoundException(format("Leave ID: %s not found", id));
     }
 
-    public void acceptLeave(Long eId, Integer lId){
+    public void acceptLeave(Integer id) {
         Leave leave = leaveRepository
-                .findById(lId)
+                .findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Leave request record not found ID: " + lId)
+                        () -> new ResourceNotFoundException(format("Leave ID: %s not found", id))
                 );
-        if (!leave.getEmployeeId().equals(eId)) throw new ResourceNotFoundException("Employee ID did not match");
         leave.setAccept(true);
         leaveRepository.save(leave);
     }
 
-    public void refuseLeave(Long eId, Integer lId){
+    public void refuseLeave(Integer id) {
         Leave leave = leaveRepository
-                .findById(lId)
+                .findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Leave request record not found ID: " + lId)
+                        () -> new ResourceNotFoundException(format("Leave ID: %s not found", id))
                 );
-        if (!leave.getEmployeeId().equals(eId)) throw new ResourceNotFoundException("Employee ID did not match");
         leave.setAccept(false);
         leaveRepository.save(leave);
     }
 
-    public void activeLeave(Long eId, Integer lId){
+    public void activeLeave(Integer id) {
         Leave leave = leaveRepository
-                .findById(lId)
+                .findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Leave request record not found ID: " + lId)
+                        () -> new ResourceNotFoundException(format("Leave ID: %s not found", id))
                 );
-        if (!leave.getEmployeeId().equals(eId)) throw new ResourceNotFoundException("Employee ID did not match");
         leave.setActive(true);
         leaveRepository.save(leave);
     }
 
-    public void inactiveLeave(Long eId, Integer lId){
+    public void inactiveLeave(Integer id) {
         Leave leave = leaveRepository
-                .findById(lId)
+                .findById(id)
                 .orElseThrow(
-                        () -> new ResourceNotFoundException("Leave request record not found ID: " + lId)
+                        () -> new ResourceNotFoundException(format("Leave ID: %s not found", id))
                 );
-        if (!leave.getEmployeeId().equals(eId)) throw new ResourceNotFoundException("Employee ID did not match");
         leave.setActive(false);
         leaveRepository.save(leave);
     }
@@ -123,6 +112,7 @@ public class LeaveRequestService {
                 .reason(leaveRequest.getReason())
                 .accept(false)
                 .active(true)
+                .employeeId(leaveRequest.getEmployeeId())
                 .build();
     }
 
